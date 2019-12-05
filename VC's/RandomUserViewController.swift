@@ -9,22 +9,46 @@
 import UIKit
 
 class RandomUserViewController: UIViewController {
+    
+    @IBOutlet weak var tableView: UITableView!
+    
+    var userLocation = [UsersDetail]() {
+        didSet {
+            tableView.reloadData()
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        tableView.dataSource = self
+        loadData()
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        guard let RandomUserDetailController = segue.destination as? RandomUserDetailController, let indexPath = tableView.indexPathForSelectedRow else {
+            return
+        }
+        RandomUserDetailController.detailUser = userLocation[indexPath.row]
     }
-    */
+    
+    func loadData() {
+        userLocation = UserData.getLocation()
+    }
+}
 
+extension RandomUserViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return userLocation.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "userCell", for: indexPath)
+        
+        let userCell = userLocation[indexPath.row]
+        cell.textLabel?.text = userCell.name["first"] ?? ""
+        cell.detailTextLabel?.text = userCell.location.country
+        return cell
+    }
+    
+    
 }

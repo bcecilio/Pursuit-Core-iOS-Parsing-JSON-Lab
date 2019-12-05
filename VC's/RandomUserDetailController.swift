@@ -9,22 +9,27 @@
 import UIKit
 
 class RandomUserDetailController: UIViewController {
+    
+    @IBOutlet weak var userImageView: UIImage!
+    @IBOutlet weak var userCountryLabel: UILabel!
+    @IBOutlet weak var userCityLabel: UILabel!
+    @IBOutlet weak var userStateLabel: UILabel!
+    @IBOutlet weak var userStreetLabel: UILabel!
+    
+    var detailUser: UsersDetail?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        updateUI()
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    func updateUI() {
+        guard let user = detailUser else {
+            fatalError("check segue")
+        }
+        userCountryLabel.text = user.location.country
+        userCityLabel.text = user.location.country
+        userStateLabel.text = user.location.state
+        userStreetLabel.text = user.location.street.number.description
     }
-    */
-
 }
